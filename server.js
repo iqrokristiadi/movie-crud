@@ -8,6 +8,7 @@ import directorRoutes from "./routes/directorRoutes.js";
 import actorRoutes from "./routes/actorRoutes.js";
 import genreRoutes from "./routes/genreRoutes.js";
 import globalSearchRoutes from "./routes/globalSearchRoutes.js";
+import filterRoutes from "./routes/filterRoutes.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/directors", directorRoutes);
 app.use("/actors", actorRoutes);
 app.use("/genres", genreRoutes);
 app.use("/search", globalSearchRoutes);
+app.use("/filter", filterRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
