@@ -33,6 +33,30 @@ export const getMovieById = async (req, res) => {
   }
 };
 
+// GET MOVIES BY DIRECTOR
+export const getMovieByDirector = async (req, res) => {
+  try {
+    const result = await Movie.find({ director: req.params.id })
+      .populate("director")
+      .populate("actors");
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// GET MOVIES BY ACTORS
+export const getMovieByActor = async (req, res) => {
+  try {
+    const result = await Movie.find({ actors: req.params.id })
+      .populate("director")
+      .populate("actors");
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // UPDATE
 export const updateMovie = async (req, res) => {
   try {
