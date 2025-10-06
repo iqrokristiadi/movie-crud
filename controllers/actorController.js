@@ -14,8 +14,18 @@ export const createActor = async (req, res) => {
 // GET ALL ACTORS
 export const getActors = async (req, res) => {
   try {
-    const actors = await Actor.find();
-    res.json(actors);
+    // read ?name=something from URL
+    const { name } = req.query;
+    let query = {};
+
+    if (name) {
+      // case-insensitive regex search
+      query.name = { $regex: name, $options: "i" };
+    }
+
+    const actors = await Actor.find(query);
+
+    res.json({ success: true, data: actors });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

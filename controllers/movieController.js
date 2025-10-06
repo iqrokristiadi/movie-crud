@@ -14,13 +14,26 @@ export const createMovie = async (req, res) => {
 // READ
 export const getMovies = async (req, res) => {
   try {
-    const movies = await Movie.find()
-      .populate("director")
-      .populate("actors")
-      .populate("genre");
-    res.json(movies);
+    // read ?title=something from URL
+    const { title } = req.query;
+    let query = {};
+
+    if (title) {
+      // Case-insensitive regex search
+      query.title = { $regex: title, $options: "i" }; //case-insensitive search
+    }
+
+    const movies = await Movie.find(query)
+      .populate("director", "name -_id")
+      .populate("actors", "name -_id")
+      .populate("genre", "name -_id");
+
+    res.json({
+      success: true,
+      data: movies,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 };
 
@@ -28,9 +41,9 @@ export const getMovies = async (req, res) => {
 export const getMovieById = async (req, res) => {
   try {
     const movie = await Movie.findById(req.params.id)
-      .populate("director")
-      .populate("actors")
-      .populate("genre");
+      .populate("director", "name -_id")
+      .populate("actors", "name -_id")
+      .populate("genre", "name -_id");
     res.json(movie);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -41,9 +54,9 @@ export const getMovieById = async (req, res) => {
 export const getMovieByDirector = async (req, res) => {
   try {
     const result = await Movie.find({ director: req.params.id })
-      .populate("director")
-      .populate("actors")
-      .populate("genre");
+      .populate("director", "name bio -_id")
+      .populate("actors", "name -_id")
+      .populate("genre", "name -_id");
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -54,9 +67,9 @@ export const getMovieByDirector = async (req, res) => {
 export const getMovieByActor = async (req, res) => {
   try {
     const result = await Movie.find({ actors: req.params.id })
-      .populate("director")
-      .populate("actors")
-      .populate("genre");
+      .populate("director", "name -_id")
+      .populate("actors", "name bio -_id")
+      .populate("genre", "name -_id");
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
