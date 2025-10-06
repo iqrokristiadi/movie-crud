@@ -2,7 +2,13 @@ import mongoose from "mongoose";
 
 const movieSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  genre: String,
+  genre: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Genre",
+      required: true,
+    },
+  ],
   releaseDate: Date,
   director: {
     type: mongoose.Schema.Types.ObjectId,

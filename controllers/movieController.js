@@ -14,7 +14,10 @@ export const createMovie = async (req, res) => {
 // READ
 export const getMovies = async (req, res) => {
   try {
-    const movies = await Movie.find().populate("director").populate("actors");
+    const movies = await Movie.find()
+      .populate("director")
+      .populate("actors")
+      .populate("genre");
     res.json(movies);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -26,7 +29,8 @@ export const getMovieById = async (req, res) => {
   try {
     const movie = await Movie.findById(req.params.id)
       .populate("director")
-      .populate("actors");
+      .populate("actors")
+      .populate("genre");
     res.json(movie);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -38,7 +42,8 @@ export const getMovieByDirector = async (req, res) => {
   try {
     const result = await Movie.find({ director: req.params.id })
       .populate("director")
-      .populate("actors");
+      .populate("actors")
+      .populate("genre");
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -50,7 +55,21 @@ export const getMovieByActor = async (req, res) => {
   try {
     const result = await Movie.find({ actors: req.params.id })
       .populate("director")
-      .populate("actors");
+      .populate("actors")
+      .populate("genre");
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// GET MOVIES BY GENRES
+export const getMovieByGenre = async (req, res) => {
+  try {
+    const result = await Movie.find({ genre: req.params.id })
+      .populate("director")
+      .populate("actors")
+      .populate("genre");
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });

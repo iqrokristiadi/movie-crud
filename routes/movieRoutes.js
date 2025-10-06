@@ -6,6 +6,7 @@ import {
   getMovieById,
   getMovieByDirector,
   getMovieByActor,
+  getMovieByGenre,
   updateMovie,
   deleteMovie,
 } from "../controllers/movieController.js";
@@ -17,6 +18,7 @@ router.get("/", getMovies);
 router.get("/:id", getMovieById);
 router.get("/director/:id", getMovieByDirector);
 router.get("/actor/:id", getMovieByActor);
+router.get("/genre/:id", getMovieByGenre);
 router.put("/:id", updateMovie);
 router.delete("/:id", deleteMovie);
 

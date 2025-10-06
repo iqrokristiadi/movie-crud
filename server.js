@@ -6,6 +6,7 @@ import connectToDB from "./database/db.js";
 import movieRoutes from "./routes/movieRoutes.js";
 import directorRoutes from "./routes/directorRoutes.js";
 import actorRoutes from "./routes/actorRoutes.js";
+import genreRoutes from "./routes/genreRoutes.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ connectToDB();
 app.use("/movies", movieRoutes);
 app.use("/directors", directorRoutes);
 app.use("/actors", actorRoutes);
+app.use("/genres", genreRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
