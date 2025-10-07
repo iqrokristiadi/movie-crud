@@ -4,7 +4,15 @@ import Genre from "../models/genre.js";
 
 export const filterMovies = async (req, res) => {
   try {
-    const { genre, director, year, page = 1, limit = 5 } = req.query; //Get Query Params
+    const {
+      genre,
+      director,
+      year,
+      page = 1,
+      limit = 5,
+      sort,
+      order = "asc",
+    } = req.query; //Get Query Params
 
     const filter = {}; //Dynamic filter object
 
@@ -36,14 +44,33 @@ export const filterMovies = async (req, res) => {
     const limitNum = parseInt(limit);
     const skip = (pageNum - 1) * limitNum; //skip formula
 
+    // Validate sort field here
+    const allowedSortField = ["title", "releaseDate", "rating"];
+    if (sort && !allowedSortField.includes(sort)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid sort field. Allowed fields ${allowedSortField.join(
+          ", "
+        )}`,
+      });
+    }
+
     // Query total count (for total pages info)
     const totalMovies = await Movie.countDocuments(filter);
+
+    // Sorting
+    let sortOption = {};
+    if (sort) {
+      // if order=desc -> use -1, otherwise 1
+      sortOption[sort] = order === "desc" ? -1 : 1;
+    }
 
     // Run the query
     const movies = await Movie.find(filter)
       .populate("director", "name -_id")
       .populate("actors", "name -_id")
       .populate("genre", "name -_id")
+      .sort(sortOption) //add sorting
       .skip(skip) //skip some docs
       .limit(limitNum); //limit the amount per page
 

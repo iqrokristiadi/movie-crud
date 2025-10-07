@@ -1,5 +1,9 @@
 import express from "express";
-
+// Models
+import Movie from "../models/movie.js";
+// Middleware
+import { queryHelper } from "../middlewares/queryHelper.js";
+// Controllers
 import {
   createMovie,
   getMovies,
@@ -13,6 +17,7 @@ import {
 
 const router = express.Router();
 
+router.get("/advanced", queryHelper(Movie, ["director", "actors", "genre"]));
 router.post("/", createMovie);
 router.get("/", getMovies);
 router.get("/:id", getMovieById);
