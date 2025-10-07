@@ -1,4 +1,5 @@
 import express from "express";
+import { protect, adminOnly } from "../middlewares/authMiddleware.js";
 import {
   createDirector,
   getDirectors,
@@ -9,10 +10,10 @@ import {
 
 const router = express.Router();
 
-router.post("/", createDirector);
+router.post("/", protect, adminOnly, createDirector);
 router.get("/", getDirectors);
 router.get("/:id", getDirectorById);
-router.put("/:id", updateDirector);
-router.delete("/:id", deleteDirector);
+router.put("/:id", protect, adminOnly, updateDirector);
+router.delete("/:id", protect, adminOnly, deleteDirector);
 
 export default router;

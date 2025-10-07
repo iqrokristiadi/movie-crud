@@ -9,6 +9,7 @@ import actorRoutes from "./routes/actorRoutes.js";
 import genreRoutes from "./routes/genreRoutes.js";
 import globalSearchRoutes from "./routes/globalSearchRoutes.js";
 import filterRoutes from "./routes/filterRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ connectToDB();
 
 // Routes
 app.use("/movies", movieRoutes);
+app.use("/auth", authRoutes);
 app.use("/directors", directorRoutes);
 app.use("/actors", actorRoutes);
 app.use("/genres", genreRoutes);

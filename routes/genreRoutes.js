@@ -1,4 +1,5 @@
 import express from "express";
+import { protect, adminOnly } from "../middlewares/authMiddleware.js";
 import {
   createGenre,
   getGenre,
@@ -8,10 +9,10 @@ import {
 } from "../controllers/genreController.js";
 const router = express.Router();
 
-router.post("/", createGenre);
+router.post("/", protect, adminOnly, createGenre);
 router.get("/", getGenre);
 router.get("/:id", getGenreById);
-router.put("/:id", updateGenre);
-router.delete("/:id", deleteGenre);
+router.put("/:id", protect, adminOnly, updateGenre);
+router.delete("/:id", protect, adminOnly, deleteGenre);
 
 export default router;

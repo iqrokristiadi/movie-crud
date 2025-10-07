@@ -1,4 +1,5 @@
 import express from "express";
+import { protect, adminOnly } from "../middlewares/authMiddleware.js";
 import {
   createActor,
   getActors,
@@ -9,10 +10,10 @@ import {
 
 const router = express.Router();
 
-router.post("/", createActor);
+router.post("/", protect, adminOnly, createActor);
 router.get("/", getActors);
 router.get("/:id", getActorById);
-router.put("/:id", updateActor);
-router.delete("/:id", deleteActor);
+router.put("/:id", protect, adminOnly, updateActor);
+router.delete("/:id", protect, adminOnly, deleteActor);
 
 export default router;
