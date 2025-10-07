@@ -47,18 +47,34 @@ export const filterMovies = async (req, res) => {
       .skip(skip) //skip some docs
       .limit(limitNum); //limit the amount per page
 
+    // Pagination metadata + keep query params
     const totalPages = Math.ceil(totalMovies / limitNum);
+
+    // Clone Query Params
+    const queryParams = { ...req.query };
+
+    // Remove page param (we’ll replace it later)
+    delete queryParams.page;
+
+    // Convert query object to a query string (e.g. "genre=Sci-Fi&limit=5")
+    const queryString = new URLSearchParams(queryParams).toString();
 
     // Build pagination URLs dynamically
     const baseUrl = `${req.protocol}://${req.get("host")}${req.baseUrl}${
       req.path
     }`;
-    const nextPage =
-      pageNum < totalPages
-        ? `${baseUrl}?page=${pageNum + 1}&limit=${limitNum}`
-        : null;
-    const prevPage =
-      pageNum > 1 ? `${baseUrl}?page=${pageNum - 1}&limit=${limitNum}` : null;
+
+    // Helper to append query strings correctly
+    const buildPageUrl = (page) => {
+      const pageParam = `page=${page}`;
+      return queryString
+        ? `${baseUrl}?${queryString}&${pageParam}`
+        : `{baseUrl}?${pageParam}`;
+    };
+
+    // Next & Prev
+    const nextPage = pageNum < totalPages ? buildPageUrl(pageNum + 1) : null;
+    const prevPage = pageNum > 1 ? buildPageUrl(pageNum - 1) : null;
 
     res.json({
       success: true,
