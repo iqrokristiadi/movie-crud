@@ -12,6 +12,7 @@ import filterRoutes from "./routes/filterRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import ratingRoutes from "./routes/ratingRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
+import watchlistRoutes from "./routes/watchlistRoutes.js";
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use("/search", globalSearchRoutes);
 app.use("/filter", filterRoutes);
 app.use("/ratings", ratingRoutes);
 app.use("/comments", commentRoutes);
+app.use("/watchlist", watchlistRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
