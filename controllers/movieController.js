@@ -24,13 +24,21 @@ export const getMovies = async (req, res) => {
     }
 
     const movies = await Movie.find(query)
-      .populate("director", "name -_id")
-      .populate("actors", "name -_id")
-      .populate("genre", "name -_id");
+      .populate("director", "name")
+      .populate("actors", "name")
+      .populate("genre", "name");
 
     res.json({
       success: true,
-      data: movies,
+      data: movies.map((movie) => ({
+        _id: movie._id,
+        title: movie.title,
+        releaseDate: movie.releaseDate,
+        director: movie.director,
+        actors: movie.actors,
+        genre: movie.genre,
+        averageRating: movie.averageRating || 0,
+      })),
     });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
