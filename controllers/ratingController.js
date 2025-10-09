@@ -61,3 +61,43 @@ export const rateMovie = async (req, res) => {
     });
   }
 };
+
+export const getUserRateMovies = async (req, res) => {
+  try {
+    // Find all ratings made by the logged-in user
+    const userRatings = await Rating.find({ user: req.user._id })
+      .populate({
+        path: "movie",
+        select: "title releaseDate averageRating director genre",
+        populate: [
+          { path: "director", select: "name" },
+          { path: "genre", select: "name" },
+        ],
+      })
+      .select("rating");
+
+    if (userRatings.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "You haven't rated any movies yet",
+      });
+    }
+
+    // Transform the response
+    const ratedMovies = userRatings.map((r) => ({
+      movie: r.movie,
+      userRating: r.rating,
+    }));
+
+    res.json({
+      success: true,
+      count: ratedMovies.length,
+      data: ratedMovies,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

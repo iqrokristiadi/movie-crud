@@ -22,6 +22,12 @@ const movieSchema = new mongoose.Schema({
     },
   ],
   averageRating: { type: Number, default: 0 },
+  ratings: [
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      rating: { type: Number, min: 1, max: 5 },
+    },
+  ],
 });
 
 const Movie = mongoose.model("Movie", movieSchema);
