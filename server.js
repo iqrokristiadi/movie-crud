@@ -14,6 +14,7 @@ import ratingRoutes from "./routes/ratingRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import watchlistRoutes from "./routes/watchlistRoutes.js";
 import favoriteRoutes from "./routes/favoriteRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use("/ratings", ratingRoutes);
 app.use("/comments", commentRoutes);
 app.use("/watchlist", watchlistRoutes);
 app.use("/favorites", favoriteRoutes);
+app.use("/users", userRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
